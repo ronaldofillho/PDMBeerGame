@@ -26,7 +26,7 @@ class Jogo {
 
     // Valida o número inserido pelo usuário
     fun validarNumero(chute: Int): situacaoDoJogo {
-        if (chute in (maiorIntervalo + 1)..<menorIntervalo) {
+        if (chute < menorIntervalo || chute > maiorIntervalo) {
             return situacaoDoJogo.FORA_DO_INTERVALO
         } else if (chute == numeroAcerto) {
             return situacaoDoJogo.VITORIA

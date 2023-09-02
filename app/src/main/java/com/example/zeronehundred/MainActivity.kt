@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var menorIntervalo: TextView
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
              val chuteTexto = chutarNumero.text.toString()
              var chute = if (chuteTexto.isEmpty()) null else chuteTexto.toInt()
                 if (chute == null) {
-                    mensagemSituacao.text = "Você não digitou um número!"
+                    Toast.makeText(this, "Você não digitou um número!", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
@@ -44,27 +45,27 @@ class MainActivity : AppCompatActivity() {
 
             when (situacao) {
                 Jogo.situacaoDoJogo.VITORIA -> {
-                    mensagemSituacao.text = "Você acertou!"
+                    Toast.makeText(this, "Você acertou!", Toast.LENGTH_SHORT).show()
                 }
                 Jogo.situacaoDoJogo.DERROTA -> {
-                    mensagemSituacao.text = "Você perdeu!"
+                    Toast.makeText(this, "Você perdeu!", Toast.LENGTH_SHORT).show()
                 }
                 Jogo.situacaoDoJogo.EM_ANDAMENTO -> {
-                    mensagemSituacao.text = "Você errou!"
+                    Toast.makeText(this, "Você errou!", Toast.LENGTH_SHORT).show()
                 }
                 Jogo.situacaoDoJogo.FORA_DO_INTERVALO -> {
-                    mensagemSituacao.text = "Você digitou um número fora do intervalo!"
+                    Toast.makeText(this, "Você digitou um número fora do intervalo!", Toast.LENGTH_SHORT).show()
                 }
             }
             menorIntervalo.text = jogo.menorIntervalo.toString()
             maiorIntervalo.text = jogo.maiorIntervalo.toString()
         }
 
-        botaoChutar.setOnLongClickListener(OnLongClickListener {
+        mensagemSituacao.setOnLongClickListener(OnLongClickListener {
             jogo.iniciarJogo()
             menorIntervalo.text = jogo.menorIntervalo.toString()
             maiorIntervalo.text = jogo.maiorIntervalo.toString()
-            mensagemSituacao.text = "Jogo reiniciado!"
+            Toast.makeText(this, "Jogo reiniciado!", Toast.LENGTH_SHORT).show()
             true
         })
     }
