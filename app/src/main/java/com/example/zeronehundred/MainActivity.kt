@@ -7,6 +7,9 @@ import android.widget.TextView
 import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
 import android.widget.Toast
+import android.content.Intent
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
     private lateinit var menorIntervalo: TextView
@@ -14,7 +17,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mensagemSituacao: TextView
     private lateinit var chutarNumero: TextView
     private lateinit var botaoChutar: Button
+    private var nomeJogador: String? = null
     private val jogo = Jogo()
+    private val outraResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val nomeVencedor = result.data?.getStringExtra("nomeVencedor")
+            if (nomeVencedor != null && nomeVencedor.isNotEmpty()) {
+                // Atualize o texto do TextView "nomeVencedorTextView" com o nome do vencedor
+                val nomeVencedorTextView = findViewById<TextView>(R.id.nomeVencedorTextView)
+                nomeVencedorTextView.text = "Vencedor: $nomeVencedor"
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         menorIntervalo.text = jogo.menorIntervalo.toString()
         maiorIntervalo.text = jogo.maiorIntervalo.toString()
 
+
         // Laço para validar sempre que o usuário apertar o botão, fazer a validação do número
          botaoChutar.setOnClickListener {
             // val chute = chutarNumero.text.toString().toInt()
@@ -41,14 +56,19 @@ class MainActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
+
             val situacao = jogo.validarNumero(chute)
 
             when (situacao) {
                 Jogo.situacaoDoJogo.VITORIA -> {
                     Toast.makeText(this, "Você acertou!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, TelaVenceu::class.java)
+                    outraResult.launch(intent)
                 }
                 Jogo.situacaoDoJogo.DERROTA -> {
                     Toast.makeText(this, "Você perdeu!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, TelaPerdeu::class.java)
+                    startActivity(intent)
                 }
                 Jogo.situacaoDoJogo.EM_ANDAMENTO -> {
                     Toast.makeText(this, "Você errou!", Toast.LENGTH_SHORT).show()

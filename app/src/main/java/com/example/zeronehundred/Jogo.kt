@@ -1,4 +1,5 @@
 package com.example.zeronehundred
+import android.util.Log
 import kotlin.random.Random
 
 class Jogo {
@@ -22,6 +23,7 @@ class Jogo {
         menorIntervalo = numeroRandomico
         maiorIntervalo = numeroRandomico + 100
         numeroAcerto = Random.nextInt(menorIntervalo, maiorIntervalo)
+        Log.i("Jogo", "Número sorteado: $numeroAcerto")
     }
 
     // Valida o número inserido pelo usuário
